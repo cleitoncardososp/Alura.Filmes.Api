@@ -9,8 +9,8 @@ using System.Linq;
 
 namespace Alura.FilmesApi.Controllers
 {
-    [Route("api/v1/[controller]")]
     [ApiController]
+    [Route("api/v1/[controller]")]
     public class CinemaController : ControllerBase
     {
         public FilmeContext _context;
@@ -23,14 +23,6 @@ namespace Alura.FilmesApi.Controllers
             _context = context;
             _mapper = mapper;
         }
-
-        #region [Métodos Auxiliares]
-        public Cinema ProcuraCinemaPeloId(int id)
-        {
-            Cinema cinema = _context.Cinemas.FirstOrDefault(cinema => cinema.Id == id);
-            return cinema;
-        }
-        #endregion
 
         #region [Métodos HTTP]
         [HttpPost]
@@ -53,7 +45,7 @@ namespace Alura.FilmesApi.Controllers
         [HttpGet("{id}")]
         public IActionResult RecuperaCinemaPorId([FromRoute] int id)
         {
-            Cinema cinema = ProcuraCinemaPeloId(id);
+            Cinema cinema = _context.Cinemas.FirstOrDefault(cinema => cinema.Id == id);
             if (cinema == null)
                 return NotFound();
 
@@ -65,7 +57,7 @@ namespace Alura.FilmesApi.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeletaCinemaPorId([FromRoute] int id)
         {
-            Cinema cinema = ProcuraCinemaPeloId(id);
+            Cinema cinema = _context.Cinemas.FirstOrDefault(cinema => cinema.Id == id);
             if (cinema == null)
                 return NotFound();
 
@@ -76,9 +68,9 @@ namespace Alura.FilmesApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult AtualizaCinemaPorId([FromRoute]int id, [FromBody] UpdateCinemaDto cinemaDto)
+        public IActionResult AtualizaCinemaPorId([FromRoute] int id, [FromBody] UpdateCinemaDto cinemaDto)
         {
-            Cinema cinema = ProcuraCinemaPeloId(id);
+            Cinema cinema = _context.Cinemas.FirstOrDefault(cinema => cinema.Id == id);
             if (cinema == null)
                 return NotFound();
 
@@ -91,5 +83,6 @@ namespace Alura.FilmesApi.Controllers
             return Ok(cinema);
         }
         #endregion
+
     }
 }
