@@ -23,14 +23,6 @@ namespace Alura.FilmesApi.Controllers
             _mapper = mapper;
         }
 
-        #region [Métodos Auxiliares]
-        public Filme ProcuraFilmePeloId(int id)
-        {
-            Filme filme = _context.Filmes.FirstOrDefault(filme => filme.Id == id);
-            return filme;
-        }
-        #endregion
-
         #region [Métodos HTTP]
         [HttpPost]
         public IActionResult AdicionaFilme([FromBody] CreateFilmeDto filmeDto)
@@ -53,7 +45,7 @@ namespace Alura.FilmesApi.Controllers
         [HttpGet("{id}")]
         public IActionResult RecuperaFilmePorId([FromRoute] int id)
         {
-            Filme filme = ProcuraFilmePeloId(id);
+            Filme filme = _context.Filmes.FirstOrDefault(filme => filme.Id == id);
 
             if (filme != null)
             {
@@ -67,7 +59,7 @@ namespace Alura.FilmesApi.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeletaFilmePorId([FromRoute] int id)
         {
-            Filme filme = ProcuraFilmePeloId(id);
+            Filme filme = _context.Filmes.FirstOrDefault(filme => filme.Id == id);
             if (filme == null)
                 return NotFound();
 
@@ -79,7 +71,7 @@ namespace Alura.FilmesApi.Controllers
         [HttpPut("{id}")]
         public IActionResult AtualizaFilmePorId([FromRoute] int id, [FromBody] UpdateFilmeDto filmeDto)
         {
-            Filme filme = ProcuraFilmePeloId(id);
+            Filme filme = _context.Filmes.FirstOrDefault(filme => filme.Id == id);
             if (filme == null)
                 return NotFound();
 
