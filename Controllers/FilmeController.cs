@@ -50,7 +50,7 @@ namespace Alura.FilmesApi.Controllers
             if (filme != null)
             {
                 ReadFilmeDto filmeDto = _mapper.Map<ReadFilmeDto>(filme);
-                filmeDto.HoraDaConsulta = DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss");
+                filmeDto.HoraDaConsulta = DateTime.Now.ToString("dd/MM/yyyy hh:mm:ss");
                 return Ok(filmeDto);
             }
             return NotFound();
