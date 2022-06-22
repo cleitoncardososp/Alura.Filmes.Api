@@ -1,6 +1,7 @@
 ﻿using Alura.FilmesApi.Data;
 using Alura.FilmesApi.Data.Dtos.Filme;
 using Alura.FilmesApi.Models;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -14,9 +15,12 @@ namespace Alura.FilmesApi.Controllers
     public class FilmeController : ControllerBase
     {
         private FilmeContext _context;
-        public FilmeController(FilmeContext context)
+        private IMapper _mapper;
+
+        public FilmeController(FilmeContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         #region [Métodos Auxiliares]
@@ -31,13 +35,8 @@ namespace Alura.FilmesApi.Controllers
         [HttpPost]
         public IActionResult AdicionaFilme([FromBody] CreateFilmeDto filmeDto)
         {
-            Filme filme = new Filme
-            {
-                Titulo = filmeDto.Titulo,
-                Diretor = filmeDto.Diretor,
-                Genero = filmeDto.Genero,
-                Duracao = filmeDto.Duracao
-            };
+            //Mapper: convertendo o filmeDto do tipo CreateFilmeDto em um Filme
+            Filme filme = _mapper.Map<Filme>(filmeDto);
 
             _context.Filmes.Add(filme);
             _context.SaveChanges();
@@ -58,15 +57,8 @@ namespace Alura.FilmesApi.Controllers
 
             if (filme != null)
             {
-                ReadFilmeDto filmeDto = new ReadFilmeDto
-                {
-                    Id = filme.Id,
-                    Titulo = filme.Titulo,
-                    Diretor = filme.Diretor,
-                    Genero = filme.Genero,
-                    Duracao = filme.Duracao,
-                    HoraDaConsulta = DateTime.Now.ToString("dd/MM/yyyy hh:mm:ss")
-                };
+                ReadFilmeDto filmeDto = _mapper.Map<ReadFilmeDto>(filme);
+                filmeDto.HoraDaConsulta = DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss");
                 return Ok(filmeDto);
             }
             return NotFound();
@@ -91,10 +83,10 @@ namespace Alura.FilmesApi.Controllers
             if (filme == null)
                 return NotFound();
 
-            filme.Titulo = filmeDto.Titulo;
-            filme.Genero = filmeDto.Genero;
-            filme.Diretor = filmeDto.Diretor;
-            filme.Duracao = filmeDto.Duracao;
+            //sobreescrevendo / copiando os dados entre objetos
+            //pegando os dados do filmeDto e colocando em filme
+            _mapper.Map(filmeDto, filme);
+
             _context.SaveChanges();
             return Ok(filme);
         }

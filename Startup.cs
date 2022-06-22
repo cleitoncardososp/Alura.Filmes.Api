@@ -32,6 +32,9 @@ namespace Alura.FilmesApi
             services.AddDbContext<FilmeContext>(
                 options => options.UseMySQL(Configuration.GetConnectionString("FilmeConnection")));
 
+            //Injeção de dependencia do AutoMapper
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
