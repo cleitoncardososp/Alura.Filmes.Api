@@ -1,12 +1,11 @@
 ﻿using Alura.FilmesApi.Data;
-using Alura.FilmesApi.Data.Dtos.Filme;
+using Alura.FilmesApi.Data.Dtos.FilmeDto;
 using Alura.FilmesApi.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Alura.FilmesApi.Controllers
 {

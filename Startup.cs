@@ -30,7 +30,7 @@ namespace Alura.FilmesApi
         {
             //Injeção de dependencia do Banco de Dados
             services.AddDbContext<FilmeContext>(
-                options => options.UseMySQL(Configuration.GetConnectionString("FilmeConnection")));
+                options => options.UseLazyLoadingProxies().UseMySQL(Configuration.GetConnectionString("FilmeConnection")));
 
             //Injeção de dependencia do AutoMapper
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
