@@ -1,10 +1,6 @@
-﻿using Alura.FilmesApi.Data.Dtos.Cinema;
+﻿using Alura.FilmesApi.Data.Dtos.CinemaDto;
 using Alura.FilmesApi.Models;
 using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Alura.FilmesApi.Profiles
 {
