@@ -22,13 +22,39 @@ namespace Alura.FilmesApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<int>("EnderecoId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("EnderecoId")
+                        .IsUnique();
+
                     b.ToTable("Cinemas");
+                });
+
+            modelBuilder.Entity("Alura.FilmesApi.Models.Endereco", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Bairro")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Logradouro")
+                        .HasColumnType("text");
+
+                    b.Property<int>("Numero")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Enderecos");
                 });
 
             modelBuilder.Entity("Alura.FilmesApi.Models.Filme", b =>
@@ -54,6 +80,22 @@ namespace Alura.FilmesApi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Filmes");
+                });
+
+            modelBuilder.Entity("Alura.FilmesApi.Models.Cinema", b =>
+                {
+                    b.HasOne("Alura.FilmesApi.Models.Endereco", "Endereco")
+                        .WithOne("Cinema")
+                        .HasForeignKey("Alura.FilmesApi.Models.Cinema", "EnderecoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Endereco");
+                });
+
+            modelBuilder.Entity("Alura.FilmesApi.Models.Endereco", b =>
+                {
+                    b.Navigation("Cinema");
                 });
 #pragma warning restore 612, 618
         }
