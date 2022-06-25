@@ -1,10 +1,12 @@
-﻿using System;
+﻿using Alura.FilmesApi.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace Alura.FilmesApi.Data.Dtos.Cinema
+namespace Alura.FilmesApi.Data.Dtos.CinemaDto
 {
     public class ReadCinemaDto
     {
@@ -13,6 +15,7 @@ namespace Alura.FilmesApi.Data.Dtos.Cinema
         public int Id { get; set; }
         [Required(ErrorMessage = "O campo de nome é obrigatório")]
         public string Nome { get; set; }
+        public virtual Endereco Endereco { get; set; }
         public string HoraDaConsulta { get; set; }
     }
 }
