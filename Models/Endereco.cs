@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Alura.FilmesApi.Models
@@ -12,7 +13,10 @@ namespace Alura.FilmesApi.Models
         [Required]
         public int Id { get; set; }
         public string Logradouro { get; set; }
-        public int Numero { get; set; }
         public string Bairro { get; set; }
+        public int Numero { get; set; }
+
+        [JsonIgnore]
+        public virtual Cinema Cinema { get; set; }
     }
 }
