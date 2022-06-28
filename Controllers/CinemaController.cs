@@ -16,8 +16,6 @@ namespace Alura.FilmesApi.Controllers
         public FilmeContext _context;
         public IMapper _mapper;
 
-        public object DataTime { get; private set; }
-
         public CinemaController(FilmeContext context, IMapper mapper)
         {
             _context = context;
