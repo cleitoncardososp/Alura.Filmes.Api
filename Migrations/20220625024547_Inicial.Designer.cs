@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Alura.FilmesApi.Migrations
 {
     [DbContext(typeof(FilmeContext))]
-    [Migration("20220624042816_Inicial")]
+    [Migration("20220625024547_Inicial")]
     partial class Inicial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,6 +27,9 @@ namespace Alura.FilmesApi.Migrations
                     b.Property<int>("EnderecoId")
                         .HasColumnType("int");
 
+                    b.Property<int>("GerenteId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasColumnType("text");
@@ -35,6 +38,8 @@ namespace Alura.FilmesApi.Migrations
 
                     b.HasIndex("EnderecoId")
                         .IsUnique();
+
+                    b.HasIndex("GerenteId");
 
                     b.ToTable("Cinemas");
                 });
@@ -84,6 +89,20 @@ namespace Alura.FilmesApi.Migrations
                     b.ToTable("Filmes");
                 });
 
+            modelBuilder.Entity("Alura.FilmesApi.Models.Gerente", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Nome")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Gerentes");
+                });
+
             modelBuilder.Entity("Alura.FilmesApi.Models.Cinema", b =>
                 {
                     b.HasOne("Alura.FilmesApi.Models.Endereco", "Endereco")
@@ -92,10 +111,23 @@ namespace Alura.FilmesApi.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Alura.FilmesApi.Models.Gerente", "Gerente")
+                        .WithMany("Cinema")
+                        .HasForeignKey("GerenteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Endereco");
+
+                    b.Navigation("Gerente");
                 });
 
             modelBuilder.Entity("Alura.FilmesApi.Models.Endereco", b =>
+                {
+                    b.Navigation("Cinema");
+                });
+
+            modelBuilder.Entity("Alura.FilmesApi.Models.Gerente", b =>
                 {
                     b.Navigation("Cinema");
                 });
