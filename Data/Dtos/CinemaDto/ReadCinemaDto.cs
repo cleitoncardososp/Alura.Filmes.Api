@@ -17,5 +17,8 @@ namespace Alura.FilmesApi.Data.Dtos.CinemaDto
         public string Nome { get; set; }
         public virtual Endereco Endereco { get; set; }
         public string HoraDaConsulta { get; set; }
+
+        public virtual Gerente Gerente { get; set; }
+        public int GerenteId { get; set; }
     }
 }
