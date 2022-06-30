@@ -10,8 +10,7 @@ namespace Alura.FilmesApi.Models
         [Required]
         public int Id { get; set; }
         public string Nome { get; set; }
-
         [JsonIgnore]
-        public virtual List<Cinema> Cinema { get; set; }
+        public virtual List<Cinema> Cinemas { get; set; }
     }
 }
