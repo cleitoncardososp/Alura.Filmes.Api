@@ -110,7 +110,7 @@ namespace Alura.FilmesApi.Migrations
                         .IsRequired();
 
                     b.HasOne("Alura.FilmesApi.Models.Gerente", "Gerente")
-                        .WithMany("Cinema")
+                        .WithMany("Cinemas")
                         .HasForeignKey("GerenteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -127,7 +127,7 @@ namespace Alura.FilmesApi.Migrations
 
             modelBuilder.Entity("Alura.FilmesApi.Models.Gerente", b =>
                 {
-                    b.Navigation("Cinema");
+                    b.Navigation("Cinemas");
                 });
 #pragma warning restore 612, 618
         }

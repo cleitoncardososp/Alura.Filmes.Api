@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Alura.FilmesApi.Migrations
 {
     [DbContext(typeof(FilmeContext))]
-    [Migration("20220625024547_Inicial")]
+    [Migration("20220630025347_Inicial")]
     partial class Inicial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -112,7 +112,7 @@ namespace Alura.FilmesApi.Migrations
                         .IsRequired();
 
                     b.HasOne("Alura.FilmesApi.Models.Gerente", "Gerente")
-                        .WithMany("Cinema")
+                        .WithMany("Cinemas")
                         .HasForeignKey("GerenteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -129,7 +129,7 @@ namespace Alura.FilmesApi.Migrations
 
             modelBuilder.Entity("Alura.FilmesApi.Models.Gerente", b =>
                 {
-                    b.Navigation("Cinema");
+                    b.Navigation("Cinemas");
                 });
 #pragma warning restore 612, 618
         }

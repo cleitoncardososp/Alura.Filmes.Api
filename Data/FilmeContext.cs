@@ -25,11 +25,11 @@ namespace Alura.FilmesApi.Data
             //1 para muitos
             builder.Entity<Cinema>()
                 .HasOne(cinema => cinema.Gerente)
-                .WithMany(gerente => gerente.Cinema)
+                .WithMany(gerente => gerente.Cinemas)
                 .HasForeignKey(cinema => cinema.GerenteId);
+                //.HasForeignKey(cinema => cinema.GerenteId).IsRequired(false); //Permitir que a chave estrangeira serja nulla
+                //.OnDelete(DeleteBehavior.Restrict) //Por padrão a deleção será como Cascade, colocando como restrict, é necessário excluir a dependencia primeiro.
         }
-
-
 
         public DbSet<Filme> Filmes { get; set; }
         public DbSet<Cinema> Cinemas { get; set; }
