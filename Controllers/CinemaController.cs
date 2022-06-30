@@ -48,7 +48,6 @@ namespace Alura.FilmesApi.Controllers
                 return NotFound();
 
             ReadCinemaDto cinemaDto = _mapper.Map<ReadCinemaDto>(cinema);
-            cinemaDto.HoraDaConsulta = DateTime.Now.ToString("dd/MM/yyyy hh:mm:ss");
             return Ok(cinemaDto);
         }
 
