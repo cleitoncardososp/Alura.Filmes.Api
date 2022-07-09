@@ -34,10 +34,25 @@ namespace Alura.FilmesApi.Controllers
         }
 
         [HttpGet]
-        public IActionResult ListaCinemas()
+        public IActionResult ListaCinemas([FromQuery] string nomeDoFilme)
         {
             List<Cinema> cinemas = _context.Cinemas.ToList();
-            return Ok(cinemas);
+            if (cinemas == null)
+            {
+                return NotFound();
+            }
+
+            if (!string.IsNullOrEmpty(nomeDoFilme))
+            {
+                IEnumerable<Cinema> query = from cinema in cinemas
+                                            where cinema.Sessoes.Any(sessao => 
+                                            sessao.Filme.Titulo == nomeDoFilme)
+                                            select cinema;
+                cinemas = query.ToList();
+            }
+
+            List<ReadCinemaDto> readDto = _mapper.Map<List<ReadCinemaDto>>(cinemas);
+            return Ok(readDto);
         }
 
         [HttpGet("{id}")]
