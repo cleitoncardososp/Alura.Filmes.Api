@@ -16,7 +16,6 @@ namespace Alura.FilmesApi.Data.Dtos.CinemaDto
         [Required(ErrorMessage = "O campo de nome é obrigatório")]
         public string Nome { get; set; }
         public virtual Endereco Endereco { get; set; }
-        public string HoraDaConsulta { get; set; }
         public virtual Gerente Gerente { get; set; }
     }
 }
