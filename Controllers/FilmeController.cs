@@ -35,10 +35,29 @@ namespace Alura.FilmesApi.Controllers
         }
 
         [HttpGet]
-        public IActionResult ListaFilmes()
+        public IActionResult ListaFilmes([FromQuery] int? classificacaoEtaria = null)
         {
-            List<Filme> filmes = _context.Filmes.ToList();
-            return Ok(filmes);
+            List<Filme> filmes = new List<Filme>();
+            List<ReadFilmeDto> readFilmeDtos = new List<ReadFilmeDto>();
+
+            if (classificacaoEtaria == null)
+            {
+                filmes = _context.Filmes.ToList();
+            }
+            else
+            {
+                filmes = _context.Filmes.Where(filme => filme.ClassificacaoEtaria <= classificacaoEtaria).ToList();
+            }
+
+            if (filmes != null)
+            {
+                readFilmeDtos = _mapper.Map<List<ReadFilmeDto>>(filmes);
+                return Ok(readFilmeDtos);
+            }
+            else
+            {
+                return NotFound();
+            }
         }
 
         [HttpGet("{id}")]
