@@ -1,18 +1,23 @@
-# Alura Filmes Api #
+Ôªø# Alura Filmes Api #
 
-AplicaÁ„o desenvolvida durante o curso API Rest com .NET 5: operaÁıes essenciais com verbos HTTP, realizando a manipulaÁ„o (CRUD) das entidades filmes, cinemas e endereÁo com EntityFramework Core e o Banco de Dados MySQL.
+Aplica√ß√£o desenvolvida durante a Forma√ß√£o .NET Core REST APIs, realizando a manipula√ß√£o (CRUD) das entidades filme, cinema, endere√ßo, gerente e sess√£o com EntityFramework Core, Banco de Dados MySQL e controle de usu√°rio com Microsoft Identity.
 
-Principais tÛpicos abordados:
+Principais t√≥picos abordados:
 
 Roteamento -> "controller/action/id" <br>
 Verbos HTTP -> Get, Post, Put, Delete <br>
 Passagem de parametros -> [FromBody], [FromRoute], [FromQuery] <br>
-ValidaÁ„o de entrada dos Par‚metros -> DataAnnotation [Required] <br>
+Valida√ß√£o de entrada dos Par√¢metros -> DataAnnotation [Required] <br>
 Conceitos iniciais de ORM -> EntityFramework, DbContext, Add-Migration, Update-Database <br>
 Gerenciador de Pacotes(Nuget) -> Microsoft.EntityFrameworkCore, <br> EntityFrameworkCore.Tools, MySql.EntityFrameworkCore <br>
-AppSettings -> ConfiguraÁ„o da String de Conex„o com o Banco de Dados. <br>
-InjeÁ„o de DependÍncia da conex„o do Banco no Startup -> services.AddDbContext<DataContext>(options => options.UseMySQL(Configuration.GetConnectionString("FilmeConnection"))); <br>
-Conceito de DTO -> PadronizaÁ„o da entrada e saÌda de dados.<br>
-Vis„o Geral sobre AutoMapper -> Pacote que possibilita convers„o de objetos, cÛpia/sobreescrita de dados dos objetos. <br>
+AppSettings -> Configura√ß√£o da String de Conex√£o com o Banco de Dados. <br>
+Inje√ß√£o de Depend√™ncia da conex√£o do Banco no Startup -> services.AddDbContext<DataContext>(options => options.UseMySQL(Configuration.GetConnectionString("FilmeConnection"))); <br>
+Conceito de DTO -> Padroniza√ß√£o da entrada e sa√≠da de dados.<br>
+Vis√£o Geral sobre AutoMapper -> Pacote que possibilita convers√£o de objetos, c√≥pia/sobreescrita de dados dos objetos. <br>
+Refatora√ß√£o de c√≥digo, encapsulando l√≥gica de neg√≥cio em classes de servi√ßo.
+Utiliza√ß√£o do FluentResult, pacote que padroniza o retorno de m√©todos.
+Utiliza√ß√£o do Identity para Gerenciamento, Valida√ß√£o e Ativa√ß√£o das contas de usu√°rios.
+Utiliza√ß√£o dos Pacotes MailKit e MimeKit para cria√ß√£o/envio de e-mail por SMTP.
 
-https://www.alura.com.br/curso-online-api-rest-net-5-operacoes-verbos-http
+https://cursos.alura.com.br/formacao-dotnet
+
