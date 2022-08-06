@@ -1,12 +1,12 @@
 ﻿using Alura.FilmesApi.Data;
 using Alura.FilmesApi.Data.Dtos.GerenteDto;
 using Alura.FilmesApi.Models;
+using Alura.FilmesApi.Services;
 using AutoMapper;
+using FluentResults;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Alura.FilmesApi.Controllers
 {
@@ -14,74 +14,62 @@ namespace Alura.FilmesApi.Controllers
     [Route("api/v1/[controller]")]
     public class GerenteController : ControllerBase
     {
-        private FilmeContext _context;
-        private IMapper _mapper;
+        private GerenteService _gerenteService;
 
-        public GerenteController(FilmeContext context, IMapper mapper)
+        public GerenteController(GerenteService gerenteService)
         {
-            _context = context;
-            _mapper = mapper;
+            _gerenteService = gerenteService;
         }
 
         [HttpPost]
         public IActionResult AdicionaGerente(CreateGerenteDto gerenteDto)
         {
-            Gerente gerente = _mapper.Map<Gerente>(gerenteDto);
-            _context.Gerentes.Add(gerente);
-            _context.SaveChanges();
+            ReadGerenteDto readGerenteDto = _gerenteService.AdicionarGerente(gerenteDto);
 
-            return CreatedAtAction(nameof(RecuperaGerentePorId), new { Id = gerente.Id }, gerente);
+            return CreatedAtAction(nameof(RecuperaGerentePorId), new { Id = readGerenteDto.Id }, readGerenteDto);
         }
 
         [HttpGet("{id}")]
         public IActionResult RecuperaGerentePorId([FromRoute] int id)
         {
-            Gerente gerente = _context.Gerentes.FirstOrDefault(gerente => gerente.Id == id);
-            if (gerente == null)
+            ReadGerenteDto readGerenteDto = _gerenteService.RecuperaGerentePorId(id);
+
+            if (readGerenteDto == null)
                 return NotFound();
 
-            ReadGerenteDto gerenteDto = _mapper.Map<ReadGerenteDto>(gerente);
-
-            return Ok(gerenteDto);
+            return Ok(readGerenteDto);
         }
 
         [HttpGet]
         public IActionResult RecuperaGerentes()
         {
-            List<Gerente> listaGerentes = _context.Gerentes.ToList();
-            List<ReadGerenteDto> listaGerentesDto = new List<ReadGerenteDto>();
+            List<ReadGerenteDto> listaGerentesDto = _gerenteService.RecuperaGerentes();
 
-            foreach (var item in listaGerentes)
-            {
-                ReadGerenteDto gerenteDto = _mapper.Map<ReadGerenteDto>(item);
-                listaGerentesDto.Add(gerenteDto);
-            }
+            if (listaGerentesDto == null)
+                return NoContent();
+
             return Ok(listaGerentesDto);
         }
 
         [HttpPut("{id}")]
         public IActionResult AtualizaGerente([FromRoute] int id, [FromBody] UpdateGerenteDto gerenteDto)
         {
-            Gerente gerenteToUpdate = _context.Gerentes.FirstOrDefault(gerente => gerente.Id == id);
-            if (gerenteToUpdate == null)
+            Result resultado = _gerenteService.AtualizarGerente(id, gerenteDto);
+
+            if (resultado.IsFailed)
                 return NotFound();
 
-            //sobreescrevendo / copiando os dados entre objetos
-            //pegando os dados do filmeDto e colocando em filme
-            _mapper.Map(gerenteDto, gerenteToUpdate);
-
-            return Ok(gerenteToUpdate);
+            return NoContent();            
         }
 
         [HttpDelete("{id}")]
         public IActionResult DeletarGerentePorId([FromRoute]int id)
         {
-            Gerente gerente = _context.Gerentes.FirstOrDefault(gerente => gerente.Id == id); ;
-            if (gerente == null)
-                return NotFound();
+            Result resultado = _gerenteService.DeletarGerentePorId(id);
 
-            _context.Gerentes.Remove(gerente);
-            _context.SaveChanges();
+            if (resultado.IsFailed)
+                return NotFound();
+           
             return NoContent();
         }
     }

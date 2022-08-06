@@ -1,12 +1,11 @@
 ﻿using Alura.FilmesApi.Data;
 using Alura.FilmesApi.Data.Dtos.SessaoDto;
 using Alura.FilmesApi.Models;
+using Alura.FilmesApi.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Alura.FilmesApi.Controllers
 {
@@ -14,34 +13,47 @@ namespace Alura.FilmesApi.Controllers
     [Route("api/v1/[controller]")]
     public class SessaoController : ControllerBase
     {
-        private FilmeContext _context;
-        private IMapper _mapper;
+        private SessaoService _sessaoService;
 
-        public SessaoController(FilmeContext context, IMapper mapper)
+        public SessaoController(SessaoService sessaoService)
         {
-            _context = context;
-            _mapper = mapper;
+            _sessaoService = sessaoService;
         }
 
+
+        #region [Métodos HTTP]
         [HttpPost]
         public IActionResult AdicionaSessao([FromBody] CreateSessaoDto sessaoDto)
         {
-            Sessao sessao = _mapper.Map<Sessao>(sessaoDto);
-            _context.Sessoes.Add(sessao);
-            _context.SaveChanges();
-            return CreatedAtAction(nameof(RecuperaSessaoPorId), new { Id = sessao.Id }, sessao );
+            ReadSessaoDto readSessaoDto = _sessaoService.AdicionaSessao(sessaoDto);
+
+            return CreatedAtAction(nameof(RecuperaSessaoPorId), new { Id = readSessaoDto.Id }, readSessaoDto );
         }
 
         [HttpGet("{id}")]
         public IActionResult RecuperaSessaoPorId([FromRoute] int id)
         {
-            Sessao sessao = _context.Sessoes.FirstOrDefault(sessao => sessao.Id == id);
-            if (sessao == null)
-                return NotFound();
+            ReadSessaoDto readSessaoDto = _sessaoService.RecuperaSessaoPorId(id);
 
-            ReadSessaoDto sessaoDto = _mapper.Map<ReadSessaoDto>(sessao);
-
-            return Ok(sessaoDto);
+            return Ok(readSessaoDto);            
         }
+
+        [HttpGet]
+        public IActionResult RecuperaSessao()
+        {
+            List<ReadSessaoDto> listaReadSessaoDtos =  _sessaoService.RecuperaSessao();
+
+            if (listaReadSessaoDtos == null)
+                return NoContent();
+
+            return Ok(listaReadSessaoDtos);
+        }
+
+        //TODO: Outros métodos
+
+        //[HttpPut]
+
+        //[HttpDelete]
+        #endregion
     }
 }

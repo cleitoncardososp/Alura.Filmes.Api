@@ -1,7 +1,9 @@
 ﻿using Alura.FilmesApi.Data;
 using Alura.FilmesApi.Data.Dtos.CinemaDto;
 using Alura.FilmesApi.Models;
+using Alura.FilmesApi.Services;
 using AutoMapper;
+using FluentResults;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -13,68 +15,50 @@ namespace Alura.FilmesApi.Controllers
     [Route("api/v1/[controller]")]
     public class CinemaController : ControllerBase
     {
-        public FilmeContext _context;
-        public IMapper _mapper;
-
-        public CinemaController(FilmeContext context, IMapper mapper)
+        public CinemaService _cinemaService;
+        public CinemaController(CinemaService cinemaService)
         {
-            _context = context;
-            _mapper = mapper;
+            _cinemaService = cinemaService;
         }
 
         #region [Métodos HTTP]
         [HttpPost]
         public IActionResult AdicionarCinema([FromBody] CreateCinemaDto cinamaDto)
         {
-            Cinema cinema = _mapper.Map<Cinema>(cinamaDto);
+            ReadCinemaDto readCinemaDto = _cinemaService.AdicionarCinema(cinamaDto);
 
-            _context.Cinemas.Add(cinema);
-            _context.SaveChanges();
-            return CreatedAtAction(nameof(RecuperaCinemaPorId), new { Id = cinema.Id }, cinema);
+            return CreatedAtAction(nameof(RecuperaCinemaPorId), new { Id = readCinemaDto.Id }, readCinemaDto);
         }
 
         [HttpGet]
         public IActionResult ListaCinemas([FromQuery] string nomeDoFilme)
         {
-            List<Cinema> cinemas = _context.Cinemas.ToList();
-            if (cinemas == null)
-            {
-                return NotFound();
-            }
+            List<ReadCinemaDto> listaReadCinemaDto = _cinemaService.ListarCinemas(nomeDoFilme);
 
-            if (!string.IsNullOrEmpty(nomeDoFilme))
-            {
-                IEnumerable<Cinema> query = from cinema in cinemas
-                                            where cinema.Sessoes.Any(sessao => 
-                                            sessao.Filme.Titulo == nomeDoFilme)
-                                            select cinema;
-                cinemas = query.ToList();
-            }
+            if (listaReadCinemaDto == null)
+                return NoContent();
 
-            List<ReadCinemaDto> readDto = _mapper.Map<List<ReadCinemaDto>>(cinemas);
-            return Ok(readDto);
+            return Ok(listaReadCinemaDto);
         }
 
         [HttpGet("{id}")]
         public IActionResult RecuperaCinemaPorId([FromRoute] int id)
         {
-            Cinema cinema = _context.Cinemas.FirstOrDefault(cinema => cinema.Id == id);
-            if (cinema == null)
+            ReadCinemaDto readCinemaDto = _cinemaService.RecuperaCinemaPorId(id);
+
+            if (readCinemaDto == null)
                 return NotFound();
 
-            ReadCinemaDto cinemaDto = _mapper.Map<ReadCinemaDto>(cinema);
-            return Ok(cinemaDto);
+            return Ok(readCinemaDto);
         }
 
         [HttpDelete("{id}")]
         public IActionResult DeletaCinemaPorId([FromRoute] int id)
         {
-            Cinema cinema = _context.Cinemas.FirstOrDefault(cinema => cinema.Id == id);
-            if (cinema == null)
-                return NotFound();
+            Result resultado = _cinemaService.DeletaCinemaPorId(id);
 
-            _context.Remove(cinema);
-            _context.SaveChanges();
+            if (resultado.IsFailed)
+                return NotFound();
 
             return NoContent();
         }
@@ -82,17 +66,12 @@ namespace Alura.FilmesApi.Controllers
         [HttpPut("{id}")]
         public IActionResult AtualizaCinemaPorId([FromRoute] int id, [FromBody] UpdateCinemaDto cinemaDto)
         {
-            Cinema cinema = _context.Cinemas.FirstOrDefault(cinema => cinema.Id == id);
-            if (cinema == null)
+            Result resultado = _cinemaService.AtualizaCinemaPorId(id, cinemaDto);
+
+            if (resultado.IsFailed)
                 return NotFound();
 
-            //Automapper
-            //sobreescrevendo / copiando os dados entre objetos
-            //pegando os dados do cinemaDto e colocando em cinema
-            _mapper.Map(cinemaDto, cinema);
-
-            _context.SaveChanges();
-            return Ok(cinema);
+            return NoContent();
         }
         #endregion
 
